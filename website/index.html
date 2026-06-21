@@ -1,0 +1,310 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>VClaw — a case study by Vignesh</title>
+<meta name="description" content="Why I built VClaw: a local-first fleet of AI-controlled machines. The story, the engineering, and the build — a portfolio case study."/>
+<link rel="icon" type="image/svg+xml" href="assets/logo.svg"/>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/regular/style.css"/>
+<link rel="stylesheet" href="styles.css"/>
+</head>
+<body>
+
+<header class="topbar"><div class="wrap">
+  <a class="brand" href="#top"><img src="assets/logo.svg" alt=""/>VClaw</a>
+  <nav class="navlinks">
+    <a href="#story">The story</a><a href="#built">What I built</a><a href="#how">How</a>
+    <a href="#timeline">Build log</a><a href="#gallery">Gallery</a>
+  </nav>
+  <span class="spacer"></span>
+  <span class="statusread"><span class="dot"></span>case study · 2026</span>
+  <a class="btn btn-primary" href="https://github.com/vkfolio/vclaw_fleet" style="padding:9px 16px"><i class="ph ph-download-simple"></i> Get VClaw</a>
+</div></header>
+
+<main id="top">
+<!-- HERO -->
+<section class="hero">
+  <div class="wrap">
+    <div class="eyebrow">A project by Vignesh · solo build</div>
+    <h1 style="margin-top:18px">
+      <span class="heroword">I</span> <span class="heroword">built</span> <span class="heroword">an</span>
+      <span class="heroword accent">AI</span> <span class="heroword">that</span> <span class="heroword">runs</span>
+      <span class="heroword">my</span> <span class="heroword">machines.</span>
+    </h1>
+    <p class="lede"><b>VClaw</b> is a local-first fleet of AI-controlled computers I designed and built —
+      install a node on each machine, then chat with its AI, drive its screen, and run commands from
+      one console, anywhere. This is the story of why, and how.</p>
+    <div class="cta">
+      <a class="btn btn-primary" href="#story"><i class="ph ph-book-open-text"></i> Read the story</a>
+      <a class="btn btn-ghost" href="#built"><i class="ph ph-squares-four"></i> See what I built</a>
+    </div>
+
+    <div class="meta reveal">
+      <div><span class="k">Role</span><span class="v">Solo — product, full-stack, design</span></div>
+      <div><span class="k">Stack</span><span class="v">Python · LangGraph · WebRTC · Swift · C++</span></div>
+      <div><span class="k">Year</span><span class="v">2026</span></div>
+      <div><span class="k">Status</span><span class="v">Live · local-first</span></div>
+    </div>
+
+    <div class="heroshot reveal">
+      <div class="glow"></div>
+      <div class="console">
+        <div class="console-bar"><i class="ph ph-circle" style="font-size:7px;color:var(--live)"></i>
+          <span>vclaw · admin console</span><span class="tt">overview</span></div>
+        <img src="assets/shots/overview.png" alt="The VClaw admin console I built"/>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- THE STORY (main) -->
+<section id="story">
+  <div class="wrap story">
+    <div class="eyebrow reveal">The story</div>
+    <h2 class="reveal">Why I built it.</h2>
+    <div class="prose">
+      <p class="reveal lead">I run several machines — a desktop, a couple of laptops, a home server.
+        I wanted <em>one</em> assistant that could actually <em>operate</em> them: not just answer
+        questions, but open apps, move files, run commands, take a screenshot, reboot a box — from my
+        phone, from anywhere.</p>
+      <p class="reveal">OpenClaw showed me the shape of that future: a personal AI wired into your
+        digital life. But the usual way to reach one — a Telegram or WhatsApp bot, or a hosted
+        service — sat wrong with me, for two reasons.</p>
+      <div class="pullquotes">
+        <div class="pq reveal"><i class="ph ph-lock-key"></i><b>Privacy.</b> Every message, file, and
+          command would pass through someone else's servers. My machines, my data — routed through a
+          third party I had to trust.</div>
+        <div class="pq reveal"><i class="ph ph-plugs"></i><b>Dependency.</b> The day their service had
+          downtime, or my bot account got flagged, my assistant would simply vanish. I didn't want a
+          controller I didn't control.</div>
+      </div>
+      <p class="reveal">So I built VClaw to flip it. The agent runs on <em>my</em> hardware — no
+        chat-platform middleman, no provider to depend on. If my machine is on, my assistant is up.
+        And I can still reach it from outside my network, privately, over my own <b>Cloudflare WARP</b>
+        mesh — with nothing exposed to the public internet.</p>
+      <p class="reveal">What began as "control my own machines" grew into a full control plane: a
+        multi-agent core, an admin console, interactive chat, a skills studio, Teams-grade remote
+        desktop, native apps — all local-first, all with me as the kill switch. Here's what came out
+        of it.</p>
+    </div>
+  </div>
+</section>
+
+<!-- WHAT I BUILT -->
+<section id="built">
+  <div class="wrap"><div class="sec-head reveal"><div class="eyebrow">What I built</div>
+    <h2>A control plane, end to end.</h2></div></div>
+
+  <div class="wrap"><div class="feature">
+    <div class="ftext reveal"><div class="eyebrow">Fleet · one console</div>
+      <h3>Every machine, one command deck.</h3>
+      <p>Pair each computer once with a QR code — then it's a node in the fleet: named, permissioned,
+        live, reachable anywhere. I built per-device capability grants with an Approve/Deny tap for
+        anything risky.</p>
+      <ul><li><i class="ph ph-qr-code"></i> QR pairing → per-device permissions, revocable instantly</li>
+        <li><i class="ph ph-gauge"></i> Live CPU / memory / disk, processes, uptime</li>
+        <li><i class="ph ph-shield-check"></i> Capability allowlist + human-in-the-loop approval</li></ul></div>
+    <div class="reveal"><div class="console"><div class="console-bar"><span>devices · permissions</span><span class="tt">live</span></div>
+      <img src="assets/shots/devices.png" alt="Paired devices with per-capability permissions"/></div></div>
+  </div></div>
+
+  <div class="wrap"><div class="feature rev">
+    <div class="ftext reveal"><div class="eyebrow">Chat · the operator</div>
+      <h3>An AI that acts — with me as the gate.</h3>
+      <p>I designed an AG-UI-style protocol so the agent renders interactive controls in chat, not
+        just text — and runs under a mode I pick.</p>
+      <div class="modes"><span class="modechip"><b>Ask</b></span><span class="modechip"><b>Plan</b></span>
+        <span class="modechip on"><b>Edit</b></span><span class="modechip"><b>Auto</b></span></div>
+      <ul><li><i class="ph ph-squares-four"></i> Interactive components: confirm, multi-select, forms, sliders…</li>
+        <li><i class="ph ph-image"></i> Attach screenshots & files — the agent sees or saves them</li></ul></div>
+    <div class="reveal"><div class="console"><div class="console-bar"><span>chat · ask_user</span><span class="tt">edit mode</span></div>
+      <img src="assets/shots/chat.png" alt="Agent rendering an interactive component in chat"/></div></div>
+  </div></div>
+
+  <div class="wrap"><div class="feature">
+    <div class="ftext reveal"><div class="eyebrow">Skills · author once</div>
+      <h3>A studio for teaching the agent.</h3>
+      <p>Reusable, multi-page playbooks with bundled scripts and references that load only when needed
+        — AI-drafted, and shareable as a <span class="mono">.vcskill</span> package.</p>
+      <ul><li><i class="ph ph-sparkle"></i> AI drafts a whole skill from one line</li>
+        <li><i class="ph ph-package"></i> Export / drag-drop install <span class="mono">.vcskill</span> files</li></ul></div>
+    <div class="reveal"><div class="console"><div class="console-bar"><span>skill studio</span><span class="tt">editing</span></div>
+      <img src="assets/shots/skills.png" alt="Skill Studio — multi-page editor with AI assist"/></div></div>
+  </div></div>
+
+  <div class="wrap"><div class="feature rev">
+    <div class="ftext reveal"><div class="eyebrow">Control · instant</div>
+      <h3>Remote desktop, terminal, one-tap actions.</h3>
+      <p>A WebRTC remote desktop (view + control), a full PTY terminal, and custom one-tap quick
+        actions — all gated through VClaw's own auth over a private mesh.</p>
+      <ul><li><i class="ph ph-monitor"></i> Teams-grade WebRTC screen + keyboard/mouse</li>
+        <li><i class="ph ph-lightning"></i> Custom quick actions — your commands, one tap</li></ul></div>
+    <div class="reveal"><div class="console"><div class="console-bar"><span>quick actions</span><span class="tt">one-tap</span></div>
+      <img src="assets/shots/quickactions.png" alt="Quick Actions — one-tap controls"/></div></div>
+  </div></div>
+
+  <div class="wrap">
+    <div class="sec-head reveal" style="margin-top:64px"><div class="eyebrow">Native apps · in development</div>
+      <h3 style="font-size:clamp(24px,3.2vw,34px);margin-top:12px">And in your pocket.</h3>
+      <p>I built a native iOS client on the same <span class="mono">/api/v1</span> — pairing, streaming
+        chat with approvals via push, remote desktop, files, and a terminal. Android &amp; desktop follow.</p></div>
+    <p class="muted" style="font-family:var(--mono);font-size:12px;margin:-8px 0 18px"><i class="ph ph-arrows-horizontal"></i> swipe — these are mockup placeholders; real captures drop in when the app ships</p>
+    <div class="phones reveal">
+
+      <div class="phone"><div class="notch"></div><div class="screen mock">
+        <div class="m-bar"><span class="m-dot"></span>Pair a device</div>
+        <div class="m-body" style="align-items:center;justify-content:center;gap:14px">
+          <div class="m-qr"><i class="ph ph-qr-code"></i></div>
+          <div class="m-code">581 213</div>
+          <span class="tiny">scan in the admin panel</span></div>
+        <span class="placeholder-tag">placeholder</span></div></div>
+
+      <div class="phone"><div class="notch"></div><div class="screen mock">
+        <div class="m-bar"><span class="m-dot live"></span>Fleet</div>
+        <div class="m-body">
+          <div class="sk-row"><span class="sk-ic"></span><span class="sk-line" style="width:55%"></span><span class="m-dot live" style="margin-left:auto"></span></div>
+          <div class="sk-row"><span class="sk-ic"></span><span class="sk-line" style="width:48%"></span><span class="m-dot live" style="margin-left:auto"></span></div>
+          <div class="sk-row"><span class="sk-ic"></span><span class="sk-line" style="width:60%"></span><span class="m-dot" style="margin-left:auto;background:var(--dim)"></span></div>
+          <div class="sk-row"><span class="sk-ic"></span><span class="sk-line" style="width:42%"></span><span class="m-dot live" style="margin-left:auto"></span></div></div>
+        <span class="placeholder-tag">placeholder</span></div></div>
+
+      <div class="phone"><div class="notch"></div><div class="screen mock">
+        <div class="m-bar"><span class="m-dot live"></span>Chat &amp; approve</div>
+        <div class="m-body">
+          <div class="bub me">reboot the desktop</div>
+          <div class="bub">On it — confirm?</div>
+          <div class="m-card"><b style="font-size:11px">Approve action?</b>
+            <div class="tiny mono" style="margin:5px 0 8px">shell · shutdown /r</div>
+            <div class="m-btns"><span class="m-b ghost">Deny</span><span class="m-b">Approve</span></div></div></div>
+        <span class="placeholder-tag">placeholder</span></div></div>
+
+      <div class="phone"><div class="notch"></div><div class="screen mock">
+        <div class="m-bar"><span class="m-dot live"></span>Remote desktop</div>
+        <div class="m-body" style="padding:10px">
+          <div class="m-rdp"><i class="ph ph-cursor"></i></div>
+          <div class="m-btns" style="margin-top:10px"><span class="m-b">View</span><span class="m-b ghost">Control</span></div></div>
+        <span class="placeholder-tag">placeholder</span></div></div>
+
+      <div class="phone"><div class="notch"></div><div class="screen mock">
+        <div class="m-bar"><span class="m-dot live"></span>Terminal</div>
+        <div class="m-body m-term">
+          <span><span class="c-in">$</span> vclaw status</span>
+          <span class="c-dim">● online · 32 cores</span>
+          <span><span class="c-in">$</span> ls ~/projects</span>
+          <span class="c-dim">vclaw  notes  scripts</span>
+          <span><span class="c-in">$</span> █</span></div>
+        <span class="placeholder-tag">placeholder</span></div></div>
+
+      <div class="phone"><div class="notch"></div><div class="screen mock">
+        <div class="m-bar"><span class="m-dot live"></span>Quick actions</div>
+        <div class="m-body">
+          <div class="m-grid">
+            <div class="m-tile"><i class="ph ph-camera"></i><span>Shot</span></div>
+            <div class="m-tile"><i class="ph ph-lock-key"></i><span>Lock</span></div>
+            <div class="m-tile"><i class="ph ph-arrows-clockwise"></i><span>Reboot</span></div>
+            <div class="m-tile"><i class="ph ph-broom"></i><span>Clean</span></div></div></div>
+        <span class="placeholder-tag">placeholder</span></div></div>
+
+    </div>
+  </div>
+</section>
+
+<!-- HOW I BUILT IT -->
+<section id="how">
+  <div class="wrap">
+    <div class="sec-head reveal"><div class="eyebrow">How I built it</div>
+      <h2>The engineering, and the calls I made.</h2>
+      <p>A Python core with a clean contracts layer, a self-contained web console, native clients, and
+        a C++ extension for the low-level stuff. A few decisions I'm proud of:</p></div>
+    <div class="grid">
+      <div class="cap reveal"><div class="ic"><i class="ph ph-video-camera"></i></div><h3>WebRTC over VNC</h3>
+        <p>Wanted Teams-grade quality, so I tunneled WebRTC through VClaw's own auth — no GPL server, no extra exposed port.</p></div>
+      <div class="cap reveal"><div class="ic"><i class="ph ph-squares-four"></i></div><h3>AG-UI-style HIL</h3>
+        <p>An event protocol so the agent renders real components (multi-select, forms) and gets structured answers back.</p></div>
+      <div class="cap reveal"><div class="ic"><i class="ph ph-shield-check"></i></div><h3>Capability + approval</h3>
+        <p>Every risky action is capability-gated and waits for a tap. Secrets never enter the model or child processes.</p></div>
+      <div class="cap reveal"><div class="ic"><i class="ph ph-globe-hemisphere-west"></i></div><h3>WARP, not a public bot</h3>
+        <p>Remote access over a private Cloudflare mesh — reachable anywhere, nothing exposed to the internet.</p></div>
+      <div class="cap reveal"><div class="ic"><i class="ph ph-brain"></i></div><h3>Multi-agent core</h3>
+        <p>LangGraph supervisor → specialist workers, multi-provider (Claude/OpenAI/Kimi/Ollama), vector memory + reflection.</p></div>
+      <div class="cap reveal"><div class="ic"><i class="ph ph-terminal-window"></i></div><h3>One-line install</h3>
+        <p>Installs, runs in the background, auto-starts at login, survives reboots — managed like a service.</p></div>
+    </div>
+    <div class="stack reveal">
+      <span class="eyebrow" style="margin-bottom:14px">Built with</span>
+      <div class="badges">
+        <span>Python 3.12</span><span>LangGraph</span><span>FastAPI</span><span>aiortc · WebRTC</span>
+        <span>sqlite-vec · RAG</span><span>nanobind · C++ / Win32</span><span>SwiftUI · iOS</span>
+        <span>Cloudflare WARP</span><span>MCP</span><span>WebSocket</span><span>xterm.js</span><span>anime.js</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- BUILD LOG / TIMELINE -->
+<section id="timeline">
+  <div class="wrap">
+    <div class="sec-head reveal"><div class="eyebrow">Build log</div>
+      <h2>From "control my machine" to a fleet.</h2></div>
+    <ol class="timeline">
+      <li class="reveal"><span class="t-n">01</span><div><h3>Agent core + memory</h3><p>Multi-provider LangGraph agent, tools, sqlite-vec memory with reflection, MCP.</p></div></li>
+      <li class="reveal"><span class="t-n">02</span><div><h3>Gateway + web console</h3><p>FastAPI <span class="mono">/api/v1</span>, JWT, WebSocket streaming, a self-contained admin panel.</p></div></li>
+      <li class="reveal"><span class="t-n">03</span><div><h3>Fleet + pairing</h3><p>Per-machine nodes, QR pairing, capability grants, an admin to manage them.</p></div></li>
+      <li class="reveal"><span class="t-n">04</span><div><h3>Remote access (WARP)</h3><p>Private Cloudflare mesh + service lifecycle that survives logout & reboot.</p></div></li>
+      <li class="reveal"><span class="t-n">05</span><div><h3>Interactive chat + modes</h3><p>AG-UI-style HIL components and Ask/Plan/Edit/Auto modes.</p></div></li>
+      <li class="reveal"><span class="t-n">06</span><div><h3>Skills studio</h3><p>Multi-page, AI-authored skills with <span class="mono">.vcskill</span> packaging.</p></div></li>
+      <li class="reveal"><span class="t-n">07</span><div><h3>Remote desktop</h3><p>Teams-grade WebRTC view + control, gated through our own auth.</p></div></li>
+      <li class="reveal"><span class="t-n">08</span><div><h3>Native apps</h3><p>A native iOS client on the same API — pairing, chat, approvals, remote.</p></div></li>
+    </ol>
+  </div>
+</section>
+
+<!-- GALLERY -->
+<section id="gallery">
+  <div class="wrap">
+    <div class="sec-head reveal"><div class="eyebrow">Gallery</div><h2>Proof of work.</h2></div>
+    <div class="gal">
+      <figure class="reveal"><img src="assets/shots/overview.png" alt="Overview"/><figcaption>Live system overview</figcaption></figure>
+      <figure class="reveal"><img src="assets/shots/chat.png" alt="Chat"/><figcaption>Interactive chat + modes</figcaption></figure>
+      <figure class="reveal"><img src="assets/shots/skills.png" alt="Skills"/><figcaption>Skill Studio</figcaption></figure>
+      <figure class="reveal"><img src="assets/shots/quickactions.png" alt="Quick actions"/><figcaption>Quick actions</figcaption></figure>
+      <figure class="reveal"><img src="assets/shots/terminal.png" alt="Terminal"/><figcaption>Built-in terminal</figcaption></figure>
+      <figure class="reveal"><img src="assets/shots/models.png" alt="Models"/><figcaption>Bring-your-own model</figcaption></figure>
+    </div>
+    <div class="video reveal" id="demo" role="button" aria-label="Play demo" style="margin-top:18px">
+      <div class="play"><i class="ph ph-play"></i></div>
+      <span class="placeholder-tag" style="position:absolute;bottom:16px;left:16px">demo video · placeholder</span>
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT / CONTACT -->
+<section id="about" class="closer">
+  <div class="wrap reveal">
+    <img src="assets/logo.svg" alt="" width="72" height="72" style="border-radius:18px;box-shadow:0 0 80px -8px var(--indigo-glow)"/>
+    <h2 style="margin-top:22px">Built by Vignesh.</h2>
+    <p>Solo design + full-stack. I like building local-first tools that put people back in control.<br/>
+      VClaw is real and installable — happy to walk through the architecture or the decisions.</p>
+    <div class="cta" style="justify-content:center">
+      <a class="btn btn-primary" href="https://github.com/vkfolio/vclaw_fleet"><i class="ph ph-download-simple"></i> Get VClaw</a>
+      <a class="btn btn-ghost" href="mailto:vigneshaiml@gmail.com"><i class="ph ph-envelope-simple"></i> Get in touch</a>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer><div class="wrap">
+  <a class="brand" href="#top" style="font-size:16px"><img src="assets/logo.svg" alt="" style="width:24px;height:24px"/>VClaw</a>
+  <span class="muted">A case study by Vignesh · local-first AI for the machines you own.</span>
+  <span class="spacer"></span>
+  <a href="https://github.com/vkfolio/vclaw_fleet">GitHub</a><a href="mailto:vigneshaiml@gmail.com">Email</a>
+</div></footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
