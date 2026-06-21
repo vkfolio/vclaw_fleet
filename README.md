@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="website/assets/logo.svg" width="78" alt="VClaw"/>
+  <img src="docs/assets/logo.svg" width="78" alt="VClaw"/>
 </p>
 
 <h1 align="center">VClaw</h1>
